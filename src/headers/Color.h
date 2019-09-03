@@ -8,24 +8,24 @@
 #include <algorithm>
 
 struct Color {
-    int r, g, b;
+    double r, g, b;
     Color() {r=g=b=0;}  //default to black
-    Color (int R, int B, int G) {r=R; g=G; b=B;}
+    Color (double R, double B, double G) {r=R; g=G; b=B;}
 
     //
-    // operations should saturate so that values don't over/underflow
+    // operations should saturate so that values don't over/underflow [0, 255]
     //
 
-    Color operator * (int d) const {
+    Color operator * (double d) const {
         if (d > 0) {
-            return { std::min(d*r, 255), std::min(d*g, 255),  std::min(d*b, 255) } ;
+            return { std::min(d*r, 255.0), std::min(d*g, 255.0),  std::min(d*b, 255.0) } ;
         }
         else {
             return {0, 0, 0};
         }
     }
     Color operator + (Color c) const {
-        return { std::min(r+c.r, 255), std::min(g+c.g, 255), std::min(b+c.b, 255) };
+        return { std::min(r+c.r, 255.0), std::min(g+c.g, 255.0), std::min(b+c.b, 255.0) };
     }
 
     static const Color red;

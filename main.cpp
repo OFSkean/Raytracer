@@ -5,6 +5,7 @@
 #include <fstream>
 #include "src/headers/Sphere.h"
 #include "src/headers/Color.h"
+#include "src/headers/Light.h"
 
 
 const int SCREEN_WIDTH = 500;
@@ -15,7 +16,7 @@ const double TIME_INCREMENT = M_PI/100;
 const int imageCount = (int)(TAU/TIME_INCREMENT) + 1;
 
 int main() {
-    // headers in screen
+    // objects in screen
     Sphere sphere(Vector(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.5, 250), 50);
 
     double solution = 20000;
@@ -23,10 +24,13 @@ int main() {
     int imageCounter = 0;
     Color pixel_color;
 
-    while (time < 0.01) {
-        Sphere red_light(Vector(SCREEN_WIDTH*0.5, 250+250*std::sin(time), 250+250*std::sin(time-M_PI_2)), 1);
-        Sphere green_light(Vector(SCREEN_WIDTH*0.5, 250+250*std::sin(time+M_PI/3), 250+250*std::sin(time+M_PI/3-M_PI_2)), 1);
-        Sphere blue_light(Vector(SCREEN_WIDTH*0.5, 250+250*std::sin(time+2*M_PI/3), 250+250*std::sin(time+2*M_PI/3-M_PI_2)), 1);
+    while (time < TAU) {
+        Light red_light(Sphere(Vector(SCREEN_WIDTH*0.5, 250+250*std::sin(time), 250+250*std::sin(time-M_PI_2)), 1),
+                        Color::red);
+        Light green_light(Sphere(Vector(SCREEN_WIDTH*0.5, 250+250*std::sin(time+2*M_PI/3), 250+250*std::sin(time+2*M_PI/3-M_PI_2)), 1),
+                          Color::green);
+        Light blue_light(Sphere(Vector(SCREEN_WIDTH*0.5, 250+250*std::sin(time+4*M_PI/3), 250+250*std::sin(time+4*M_PI/3-M_PI_2)), 1),
+                          Color::white);
 
         time += TIME_INCREMENT;
 
@@ -46,16 +50,14 @@ int main() {
 
                     Vector normal = sphere.getNormal(intersection_point);
 
-                    Vector normRedVec = (intersection_point - red_light.center).normalize();
-                    Vector normBlueVec = (intersection_point - blue_light.center).normalize();
-                    Vector normGreenVec = (intersection_point - green_light.center).normalize();
-
-                    pixel_color = (Color::blue * (int)normBlueVec.dot(normal)) + (Color::red * (int)normRedVec.dot(normal)) + (Color::green * (int)normGreenVec.dot(normal));
+                    pixel_color = red_light.getIntensity(intersection_point, normal) +
+                                  green_light.getIntensity(intersection_point, normal) +
+                                  blue_light.getIntensity(intersection_point, normal);
                 }
 
-                render << (int) pixel_color.r << std::endl
-                       << (int) pixel_color.b << std::endl
-                       << (int) pixel_color.g << std::endl;
+                render << (int)pixel_color.r << "\n"
+                       << (int)pixel_color.b << "\n"
+                       << (int)pixel_color.g << "\n";
             }
         }
         render.close();
