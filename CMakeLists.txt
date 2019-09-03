@@ -3,4 +3,4 @@ project(RayTracer)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(RayTracer main.cpp src/objects/Vector.h src/objects/Ray.h src/objects/Sphere.h src/objects/Color.h)
+add_executable(RayTracer main.cpp src/headers/Vector.h src/headers/Ray.h src/headers/Sphere.h src/headers/Color.h)

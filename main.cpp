@@ -3,8 +3,8 @@
 #include <iostream>
 #include <cmath>
 #include <fstream>
-#include "src/objects/Color.h"
-#include "src/objects/Sphere.h"
+#include "src/headers/Sphere.h"
+#include "src/headers/Color.h"
 
 
 const int SCREEN_WIDTH = 500;
@@ -15,7 +15,7 @@ const double TIME_INCREMENT = M_PI/100;
 const int imageCount = (int)(TAU/TIME_INCREMENT) + 1;
 
 int main() {
-    // objects in screen
+    // headers in screen
     Sphere sphere(Vector(SCREEN_WIDTH*0.5, SCREEN_HEIGHT*0.5, 250), 50);
 
     double solution = 20000;
